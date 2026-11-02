@@ -57,7 +57,24 @@ fn roast_click(game: &mut crate::game::Game<'_>, pos: [i32; 3], face: [i32; 3], 
     } else if let Some(c) = defs.cake(&block) {
         let bites: i32 = game.native_block_property(pos, &c.property).and_then(|v| v.parse().ok()).unwrap_or(0);
         let hungry = game.player.as_ref().is_some_and(|p| p.health.food.food < 20);
-        if let roast::CakeOutcome::Eat { new } = roast::cake_click(c, bites, hungry) {
+        let slicing = {
+            let in_tag = |item: &str, tag: &str| game.items().item_tags.get(tag).is_some_and(|t| t.contains(item));
+            c.is_slicer(held.as_deref(), &in_tag)
+        };
+        let outcome = roast::cake_click(c, bites, hungry, slicing);
+        if let roast::CakeOutcome::Slice { new } = outcome {
+            if let Some(slice) = &c.slice_item {
+                if game.native_give_items(slice, 1) == 1 {
+                    match new {
+                        Some(n) => {
+                            game.native_set_block_property(pos, &c.property, &n.to_string());
+                        }
+                        None => replace = Some(c.leave.clone()),
+                    }
+                    sound = c.sound.clone();
+                }
+            }
+        } else if let roast::CakeOutcome::Eat { new } = outcome {
             // Feeding uses the game's own food data and effect list (private game API: a nightly may move them).
             if let Some(p) = game.player.as_mut() {
                 let food = &mut p.health.food;

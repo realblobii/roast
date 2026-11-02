@@ -165,6 +165,10 @@ pub struct Cake {
     pub effects: Vec<Effect>,
     /// Eating the bite at `max` removes the block; `leave` names a block that replaces it instead (a plate).
     pub leave: Option<String>,
+    /// An item id or `#tag` (a knife) that cuts a bite off as an item instead of eating it.
+    pub slice_tool: Option<String>,
+    /// The item a cut bite gives (a slice of pie).
+    pub slice_item: Option<String>,
     pub sound: Option<String>,
 }
 
@@ -196,12 +200,26 @@ pub fn parse_cake(id: &str, json: &serde_json::Value) -> Result<Cake, String> {
         always_edible: json.get("always_edible").and_then(|v| v.as_bool()).unwrap_or(false),
         effects,
         leave: text(json, "leave").filter(|b| b.contains(':')).map(str::to_owned),
+        slice_tool: text(json, "slice_tool").map(|t| if let Some(x) = t.strip_prefix('#') { format!("#{}", qualify(x)) } else { qualify(t) }),
+        slice_item: text(json, "slice_item").map(qualify),
         sound: parse_sound(json)?,
     })
 }
 
+impl Cake {
+    /// Whether `held` is the tool that cuts slices. `in_tag(item, tag)` tests an item tag (tag without `#`).
+    pub fn is_slicer(&self, held: Option<&str>, in_tag: &dyn Fn(&str, &str) -> bool) -> bool {
+        match (&self.slice_tool, &self.slice_item, held) {
+            (Some(t), Some(_), Some(h)) => match t.strip_prefix('#') { Some(tag) => in_tag(h, tag), None => t == h },
+            _ => false,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum CakeOutcome {
+    /// Cut a bite off as an item (`slice_item`); `new` is the bites gone after it, or None when it was the last.
+    Slice { new: Option<i32> },
     /// Not hungry enough (and not `always_edible`).
     Full,
     /// Eat a bite; `new` is the bites eaten after it, or None when this bite finishes it and the block goes.
@@ -209,7 +227,10 @@ pub enum CakeOutcome {
 }
 
 /// `hungry` is whether the player's food level is below full.
-pub fn cake_click(c: &Cake, bites: i32, hungry: bool) -> CakeOutcome {
+pub fn cake_click(c: &Cake, bites: i32, hungry: bool, slicing: bool) -> CakeOutcome {
+    if slicing {
+        return CakeOutcome::Slice { new: if bites >= c.max { None } else { Some(bites + 1) } };
+    }
     if !hungry && !c.always_edible {
         return CakeOutcome::Full;
     }
@@ -485,12 +506,23 @@ mod tests {
             "effects": [ { "id": "regeneration", "duration": 40 } ] })).unwrap();
         assert_eq!(c.saturation, 3.0);
         assert_eq!(c.effects[0].id, "minecraft:regeneration");
-        assert_eq!(cake_click(&c, 0, true), CakeOutcome::Eat { new: Some(1) });
-        assert_eq!(cake_click(&c, 3, true), CakeOutcome::Eat { new: None });
-        assert_eq!(cake_click(&c, 0, false), CakeOutcome::Full);
+        assert_eq!(cake_click(&c, 0, true, false), CakeOutcome::Eat { new: Some(1) });
+        assert_eq!(cake_click(&c, 3, true, false), CakeOutcome::Eat { new: None });
+        assert_eq!(cake_click(&c, 0, false, false), CakeOutcome::Full);
         let mut a = c.clone();
         a.always_edible = true;
-        assert_eq!(cake_click(&a, 0, false), CakeOutcome::Eat { new: Some(1) });
+        assert_eq!(cake_click(&a, 0, false, false), CakeOutcome::Eat { new: Some(1) });
+    }
+
+    #[test]
+    fn a_knife_cuts_slices_off_a_pie() {
+        let c = parse_cake("t:c", &json!({ "block": "t:pie", "max": 3, "slice_tool": "#c:tools/knife", "slice_item": "t:slice" })).unwrap();
+        let knife = |i: &str, t: &str| t == "c:tools/knife" && i == "t:knife";
+        assert!(c.is_slicer(Some("t:knife"), &knife) && !c.is_slicer(Some("t:spoon"), &knife) && !c.is_slicer(None, &knife));
+        assert_eq!(cake_click(&c, 1, false, true), CakeOutcome::Slice { new: Some(2) });
+        assert_eq!(cake_click(&c, 3, false, true), CakeOutcome::Slice { new: None });
+        let plain = parse_cake("t:c", &json!({ "block": "t:pie" })).unwrap();
+        assert!(!plain.is_slicer(Some("t:knife"), &knife));
     }
 
     #[test]

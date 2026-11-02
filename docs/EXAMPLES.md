@@ -24,6 +24,13 @@ The block declares `bites` as an enum "0".."3". Use a plain template (such as `m
   "effects": [ { "id": "minecraft:regeneration", "duration": 60 } ] }
 ```
 
+## A pie you can eat from or slice with a knife (Pumpkin Pie Delight style)
+
+```json
+{ "type": "roast:cake", "block": "mypack:pumpkin_pie", "max": 3, "nutrition": 3, "saturation": 0.3,
+  "slice_tool": "#c:tools/knife", "slice_item": "mypack:pumpkin_pie_slice" }
+```
+
 ## A plate that shows any item
 
 ```json

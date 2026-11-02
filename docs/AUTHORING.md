@@ -1,4 +1,4 @@
-# Roast authoring reference (v0.2.0)
+# Roast authoring reference (v0.3.0)
 
 > **Written from the source and unit-tested only for its pure logic (against a stand-in JSON library). The game hooks were never
 > compiled against Horizon or run.** See `FINDINGS.md` and `TROUBLESHOOTING.md`.
@@ -34,6 +34,8 @@ eat twice), and only the main hand acts.
 | `always_edible` | false | Eat even when not hungry. |
 | `effects` | none | List of `{ "id", "duration" (ticks), "amplifier", "chance" }` applied each bite (vanilla effect ids). |
 | `leave` | none | A block that replaces the cake when finished (a plate); default: removed. |
+| `slice_tool` | none | An item id or `#tag` (a knife): right-click with it cuts a bite off as an item instead of eating it. |
+| `slice_item` | none | The item a cut bite gives (a slice of pie). Needs `slice_tool`. |
 | `sound` | none | |
 
 Feeding and effects use the game's own food data and effect list, which are **private game API**: a Horizon nightly may move them.

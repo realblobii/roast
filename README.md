@@ -20,7 +20,7 @@ All four are definitions in JSON inside a content mod; Roast reads them when a w
 
 ## Status
 
-Version 0.2.0 is **written, not run in Horizon**: the pure logic has unit tests (against a stand-in JSON library); the game hooks were never
+Version 0.3.0 is **written, not run in Horizon**: the pure logic has unit tests (against a stand-in JSON library); the game hooks were never
 compiled against Horizon. The demo mod `testmod/rtest` shows a feast, a pie, a display and a placeable cookie.
 
 ## Files

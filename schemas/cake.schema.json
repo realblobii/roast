@@ -87,6 +87,13 @@
     "sound": {
       "type": "string",
       "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    },
+    "slice_tool": {
+      "type": "string"
+    },
+    "slice_item": {
+      "type": "string",
+      "pattern": ":"
     }
   }
 }
