@@ -6,7 +6,7 @@
 3. **Tell players Roast must be installed** (and enabled under Options > Mods). Horizon's manifest has no documented dependency field,
    so say it in your description and README. Without Roast the blocks exist but do nothing. The log of a game with Roast shows `roast` lines.
 4. Content is read once at game start: JSON edits need a game restart, not a Roast rebuild.
-5. Test with the demo [`testmod/rtest`](../testmod/rtest) first if something fails, to tell a Roast fault from a pack fault.
+5. If something fails, compare with [Delightful](https://github.com/realblobii/delightful), which uses all four kinds.
 6. Keep your block and item ids stable: players' worlds store them.
 
 Validate files against the [schemas](../schemas/) in your editor by pointing `$schema` at the matching file.

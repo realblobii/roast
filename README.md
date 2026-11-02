@@ -27,8 +27,7 @@ Start at the **[documentation home](docs/README.md)**:
 - [Shipping your mod](docs/SHIPPING.md) and [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [JSON schemas](schemas/) for editor validation
 
-Working demo: [`testmod/rtest`](testmod/rtest). Real-world use: [Delightful](https://github.com/realblobii/delightful) uses Roast for
-its feasts, pies and 104 placeable foods.
+Real-world example: [Delightful](https://github.com/realblobii/delightful) uses Roast for its feasts, pies and 104 placeable foods, and doubles as the test mod.
 
 ## Status
 

@@ -15,7 +15,7 @@ Roast lets a content mod add **feasts, cakes and pies, displays that show any it
 | [JSON schemas](../schemas/) | You want your editor to check your files. |
 | [Findings](dev/FINDINGS.md), [Brief](dev/BRIEF.md), [Open questions](dev/OPEN_QUESTIONS.md) | You work on Roast itself. |
 
-Working demo: [`testmod/rtest`](../testmod/rtest).
+Real-world example: [Delightful](https://github.com/realblobii/delightful).
 
 ## Which file do I write?
 

@@ -1,8 +1,0 @@
-{
-  "type": "roast:placeable",
-  "item": "rtest:cookie",
-  "block": "rtest:cookie_block",
-  "stack_max": 4,
-  "sneak_to_place": true,
-  "sound": "minecraft:block.wool.place"
-}

@@ -87,4 +87,4 @@ sales and the support table under non-sturdy tops. Sneaking is read from `Game.k
 ## Built
 
 Roast 0.1.0: four kinds (`roast:feast`, `roast:cake`, `roast:display`, `roast:placeable`), 8 unit tests (pass against a stand-in JSON
-library), a demo mod `testmod/rtest`, schemas, docs. **Not built or run in Horizon.**
+library), schemas, docs. **Not built or run in Horizon.**

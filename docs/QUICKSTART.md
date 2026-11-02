@@ -1,6 +1,6 @@
 # Quickstart: a feast in four files
 
-> Written from the source, **not run in the game**. The finished example is `testmod/rtest/`.
+> Written from the source, **not run in the game**. A larger finished example is [Delightful](https://github.com/realblobii/delightful).
 
 You need Roast installed (a native mod, built once by the launcher) and a content mod. Replace `mypack`.
 
