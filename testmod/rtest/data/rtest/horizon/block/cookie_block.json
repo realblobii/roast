@@ -1,4 +1,18 @@
 {
   "template": "minecraft:stone",
-  "item": false
+  "item": false,
+  "state_properties": {
+    "count": {
+      "type": "enum",
+      "values": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    }
+  },
+  "default_state": {
+    "count": "1"
+  }
 }

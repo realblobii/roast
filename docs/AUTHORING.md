@@ -1,4 +1,4 @@
-# Roast authoring reference (v0.1.0)
+# Roast authoring reference (v0.2.0)
 
 > **Written from the source and unit-tested only for its pure logic (against a stand-in JSON library). The game hooks were never
 > compiled against Horizon or run.** See `FINDINGS.md` and `TROUBLESHOOTING.md`.
@@ -64,9 +64,15 @@ block but not drawn.
 | `item` | required | The item. |
 | `block` | required | The block placed in the air next to the clicked face. |
 | `top_only` | true | Only on the top of a block; false allows any face. |
+| `sneak_to_place` | false | Set down only while sneaking, so using the item normally still eats it (Display Delight's rule for foods in bowls). |
+| `stack_max` | 1 | How many of the item may share the block (finger foods on a plate), 1 to 64. |
+| `stack_property` | `count` | The block's enum property counting them ("1".."stack_max"); declare it in `state_properties`. |
+| `take` | true | Right-click with an empty hand takes one back; sneaking takes them all. |
 | `sound` | none | |
 
-One item is used (none in creative). Breaking the block drops what its loot table says: give it a table that drops the item.
+With the same item in hand, a right-click on the placed block adds one (up to `stack_max`). One item is used per placement (none in
+creative). Breaking the block drops what its loot table says: give it a table that drops the item, with `minecraft:set_count` per
+value of the count property if it stacks. Sneaking is read from the Shift key on the machine running the game (single player and LAN host).
 
 ## Limits
 
@@ -74,5 +80,5 @@ One item is used (none in creative). Breaking the block drops what its loot tabl
 - Feast servings leave the block's property only; models per value come from your blockstate file.
 - A block must exist in a content mod; vanilla blocks cannot be given servings.
 - Clients and servers need the same mods.
-- Not yet: several items per display, shelf-style multi-slot displays, hunger restored by feasts directly (they give an item to eat),
+- Not yet: Display Delight's wandering-trader sales, its support table under non-sturdy tops, and models drawn per count by Roast itself (use your blockstate); several items per display, shelf-style multi-slot displays, hunger restored by feasts directly (they give an item to eat),
   per-serving model parts drawn by Roast, comparator output.

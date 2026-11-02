@@ -9,6 +9,9 @@ fn roast_use_item(game: &mut crate::game::Game<'_>, stack: &ItemStack, pos: [i32
     if game.hand != horizon_client::first_person::Hand::Main {
         return;
     }
+    if p.sneak_to_place && !game.keys.contains(&KeyCode::ShiftLeft) {
+        return;
+    }
     let target = {
         let air_at = |at: [i32; 3]| game.native_block(at) == "minecraft:air";
         roast::placeable_target(p, pos, face, &air_at)
@@ -22,6 +25,9 @@ fn roast_use_item(game: &mut crate::game::Game<'_>, stack: &ItemStack, pos: [i32
     let dim = game.dim.id().to_owned();
     if !game.native_set_block(&dim, target, id, flags::UPDATE_ALL) {
         return;
+    }
+    if p.stack_max > 1 {
+        game.native_set_block_property(target, &p.stack_property, "1");
     }
     if !game.creative {
         game.native_take_items(&p.item, 1);

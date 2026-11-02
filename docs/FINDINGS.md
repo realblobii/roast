@@ -77,6 +77,13 @@ state, flags)` (`hooks.rs:3181`) places; the block id becomes a state by `regist
 bindings follow the signatures read here but were never built; `game.hand`, `game.dim.id()`, `game.creative` and `game.items()` are
 private fields reached as `ModItems` and `providers()` were in Cookpot.
 
+## Display Delight coverage (v0.2.0)
+
+Display Delight (LGPL-3.0-or-later per Modrinth; source not found) places foods as 3D blocks, sneak-right-click for foods in containers, stacks finger
+foods on larger plates, empty-hand right-click takes one and sneak-right-click takes all, and drops the item on breaking. `roast:placeable` now covers
+these (`sneak_to_place`, `stack_max`/`stack_property`, `take`) and `roast:display` covers a plate that shows any item. Not covered: the wandering trader
+sales and the support table under non-sturdy tops. Sneaking is read from `Game.keys` (Shift): host-side only.
+
 ## Built
 
 Roast 0.1.0: four kinds (`roast:feast`, `roast:cake`, `roast:display`, `roast:placeable`), 8 unit tests (pass against a stand-in JSON

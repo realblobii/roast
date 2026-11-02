@@ -36,6 +36,15 @@ The block declares `bites` as an enum "0".."3". Use a plain template (such as `m
 { "type": "roast:display", "block": "mypack:shelf", "accepts": ["#c:foods"], "lay_flat": false, "scale": 0.5, "offset": [0.5, 0.5, 0.5] }
 ```
 
+## Finger foods on a plate (Display Delight style): up to 4, sneak to place, empty hand takes one, sneak takes all
+
+The block declares `count` as an enum "1".."4" and a blockstate model per count.
+
+```json
+{ "type": "roast:placeable", "item": "mypack:spring_roll", "block": "mypack:spring_rolls_plate",
+  "stack_max": 4, "stack_property": "count", "sneak_to_place": true }
+```
+
 ## A placeable cookie
 
 ```json

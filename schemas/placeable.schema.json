@@ -25,6 +25,24 @@
     "sound": {
       "type": "string",
       "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    },
+    "stack_max": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 64,
+      "default": 1
+    },
+    "stack_property": {
+      "type": "string",
+      "default": "count"
+    },
+    "sneak_to_place": {
+      "type": "boolean",
+      "default": false
+    },
+    "take": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

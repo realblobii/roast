@@ -80,6 +80,39 @@ fn roast_click(game: &mut crate::game::Game<'_>, pos: [i32; 3], face: [i32; 3], 
             }
             sound = c.sound.clone();
         }
+    } else if let Some(p) = defs.placed(&block) {
+        let count: i32 = if p.stack_max > 1 { game.native_block_property(pos, &p.stack_property).and_then(|v| v.parse().ok()).unwrap_or(1) } else { 1 };
+        let sneaking = game.keys.contains(&KeyCode::ShiftLeft);
+        match roast::placed_click(p, count, held.as_deref(), sneaking) {
+            roast::PlacedOutcome::Nothing => {}
+            roast::PlacedOutcome::Add { new } => {
+                if game.native_take_items(&p.item, 1) == 1 {
+                    game.native_set_block_property(pos, &p.stack_property, &new.to_string());
+                    sound = p.sound.clone();
+                }
+            }
+            roast::PlacedOutcome::TakeOne { new } => {
+                if game.native_give_items(&p.item, 1) == 1 {
+                    if new <= 0 {
+                        replace = Some(None);
+                    } else {
+                        game.native_set_block_property(pos, &p.stack_property, &new.to_string());
+                    }
+                    sound = p.sound.clone();
+                }
+            }
+            roast::PlacedOutcome::TakeAll { count } => {
+                let given = game.native_give_items(&p.item, count as u32) as i32;
+                if given >= count {
+                    replace = Some(None);
+                } else if given > 0 {
+                    game.native_set_block_property(pos, &p.stack_property, &(count - given).to_string());
+                }
+                if given > 0 {
+                    sound = p.sound.clone();
+                }
+            }
+        }
     } else if let Some(d) = defs.display(&block) {
         let shown: Option<String> = game
             .native_with_mod_block_entity(pos, |e| e.items.first().and_then(|s| s.as_ref()).map(|s| s.item.to_string()))

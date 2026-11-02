@@ -298,6 +298,14 @@ pub struct Placeable {
     pub block: String,
     /// Only on the top of a block (default), or on any face.
     pub top_only: bool,
+    /// Several of the item may share the block (finger foods on a plate): the most, counted by `stack_property`.
+    pub stack_max: i32,
+    /// The block's enum property counting the items ("1".."stack_max"); only used when `stack_max` is above 1.
+    pub stack_property: String,
+    /// The item is set down only while sneaking (so that using it normally still eats it).
+    pub sneak_to_place: bool,
+    /// Right-click with an empty hand takes one back (sneaking: all of them).
+    pub take: bool,
     pub sound: Option<String>,
 }
 
@@ -309,8 +317,33 @@ pub fn parse_placeable(id: &str, json: &serde_json::Value) -> Result<Placeable, 
         item,
         block: block.to_owned(),
         top_only: json.get("top_only").and_then(|v| v.as_bool()).unwrap_or(true),
+        stack_max: int(json, "stack_max", 1, 1, 64)?,
+        stack_property: text(json, "stack_property").unwrap_or("count").to_owned(),
+        sneak_to_place: json.get("sneak_to_place").and_then(|v| v.as_bool()).unwrap_or(false),
+        take: json.get("take").and_then(|v| v.as_bool()).unwrap_or(true),
         sound: parse_sound(json)?,
     })
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum PlacedOutcome {
+    Nothing,
+    /// Add the held item to the block: `new` items on it afterwards.
+    Add { new: i32 },
+    /// Take one back: `new` items left (0 removes the block).
+    TakeOne { new: i32 },
+    /// Take all `count` back and remove the block.
+    TakeAll { count: i32 },
+}
+
+/// What a click on a block a placeable put down does. `count` is the items on it (1 without a stack property).
+pub fn placed_click(p: &Placeable, count: i32, held: Option<&str>, sneaking: bool) -> PlacedOutcome {
+    match held {
+        Some(h) if h == p.item && !sneaking && count < p.stack_max => PlacedOutcome::Add { new: count + 1 },
+        None if p.take && sneaking => PlacedOutcome::TakeAll { count: count.max(1) },
+        None if p.take => PlacedOutcome::TakeOne { new: count - 1 },
+        _ => PlacedOutcome::Nothing,
+    }
 }
 
 /// The position a placeable goes to, or None. `face` is the clicked face's normal; `air_at(pos)` says the spot is empty.
@@ -347,9 +380,13 @@ impl Defs {
     pub fn placeable(&self, item: &str) -> Option<&Placeable> {
         self.placeables.iter().find(|d| d.item == item)
     }
+    /// The placeable whose block is `block`.
+    pub fn placed(&self, block: &str) -> Option<&Placeable> {
+        self.placeables.iter().find(|d| d.block == block)
+    }
     /// Whether any definition names `block`.
     pub fn knows(&self, block: &str) -> bool {
-        self.feast(block).is_some() || self.cake(block).is_some() || self.display(block).is_some()
+        self.feast(block).is_some() || self.cake(block).is_some() || self.display(block).is_some() || self.placed(block).is_some()
     }
 }
 
@@ -483,6 +520,22 @@ mod tests {
     }
 
     #[test]
+    fn finger_foods_stack_and_come_back_one_or_all() {
+        let p = parse_placeable("t:p", &json!({ "item": "t:cookie", "block": "t:cookies", "stack_max": 4, "sneak_to_place": true })).unwrap();
+        assert!(p.sneak_to_place && p.take && p.stack_property == "count");
+        assert_eq!(placed_click(&p, 1, Some("t:cookie"), false), PlacedOutcome::Add { new: 2 });
+        assert_eq!(placed_click(&p, 4, Some("t:cookie"), false), PlacedOutcome::Nothing);
+        assert_eq!(placed_click(&p, 3, Some("t:other"), false), PlacedOutcome::Nothing);
+        assert_eq!(placed_click(&p, 3, None, false), PlacedOutcome::TakeOne { new: 2 });
+        assert_eq!(placed_click(&p, 1, None, false), PlacedOutcome::TakeOne { new: 0 });
+        assert_eq!(placed_click(&p, 3, None, true), PlacedOutcome::TakeAll { count: 3 });
+        let mut keep = p.clone();
+        keep.take = false;
+        assert_eq!(placed_click(&keep, 3, None, false), PlacedOutcome::Nothing);
+        assert!(parse_placeable("x", &json!({ "item": "t:a", "block": "t:b", "stack_max": 99 })).is_err());
+    }
+
+    #[test]
     fn registry_loads_files_of_all_four_kinds_and_skips_bad_ones() {
         let defs = load(vec![
             ("t:a".into(), json!({ "type": "roast:feast", "block": "t:stew", "serving": "t:s" })),
@@ -493,7 +546,8 @@ mod tests {
             ("t:other".into(), json!({ "type": "cookpot:machine" })),
         ]);
         assert_eq!((defs.feasts.len(), defs.cakes.len(), defs.displays.len(), defs.placeables.len()), (1, 1, 1, 1));
-        assert!(defs.knows("t:plate") && defs.knows("t:pie") && !defs.knows("t:cookie_block"));
+        assert!(defs.knows("t:plate") && defs.knows("t:pie") && defs.knows("t:cookie_block"));
+        assert!(defs.placed("t:cookie_block").is_some() && defs.placed("t:nothing").is_none());
         assert!(defs.placeable("minecraft:nothing").is_none() && defs.placeable("t:cookie").is_some());
     }
 }
