@@ -1,35 +1,39 @@
 # Roast
 
-A **library native mod** for the [Horizon](https://github.com/horizon-rust/horizon) Minecraft client (an unofficial Rust
-rewrite of Java Edition 26.3) that lets content mods add **feasts, placeable plates, placeable food and cake-like blocks**
-with data files only, no Rust. Roast is to food blocks what [Cookpot](https://github.com/realblobii/cookpot) is to crafting
-machines: it ships the behaviour and the documentation, and adds no food of its own.
+Roast lets [Horizon](https://github.com/horizon-rust/horizon) content mods add **feasts, cakes and pies, display plates and
+placeable food** with JSON files only, no Rust. It adds no food or blocks of its own: it is the behaviour, and your mod brings the
+blocks, models and recipes. (Its sister library for crafting machines is [Cookpot](https://github.com/realblobii/cookpot).)
 
-[Delightful](https://github.com/realblobii/delightful) is the first user. It had to drop 22 feast blocks and turn its pies into
-plain cakes because Horizon's block templates have no "servings" behaviour. Roast is what lets them come back.
+| Kind | What it does |
+|---|---|
+| `roast:feast` | A block with servings. Right-click with a bowl (or any container you choose) to take one as an item. |
+| `roast:cake` | A block eaten in bites, with nutrition, effects and a leftover. Optionally sliced with a knife. |
+| `roast:display` | A block that holds and shows any item you put on it: a plate, a shelf, a stand. |
+| `roast:placeable` | An item that can be set down as a block, can stack (finger foods on a plate) and be taken back. |
 
-## What it should cover
+```json
+{ "type": "roast:feast", "block": "mypack:roast_chicken_block", "max": 4, "container": "minecraft:bowl",
+  "serving": "mypack:roast_chicken", "on_empty": "break" }
+```
 
-- **Feasts:** a block with servings. Right-click with the container item (a bowl) to take a serving, which becomes a normal
-  food item in your inventory; the block shows fewer servings each time and leaves a dish or vanishes when empty.
-- **Cake-like blocks:** a block eaten in bites (pies, cakes, cheesecakes), with its own nutrition, effects and leftover.
-- **Displays:** a block that holds **any item** you place on it and shows it (a plate, a shelf, Display-Delight-style), not only cake.
-- **Placeable food:** food items that can also be set down as a block and eaten from it.
+## Documentation
 
-All four are definitions in JSON inside a content mod; Roast reads them when a world loads, the way Cookpot does.
+Start at the **[documentation home](docs/README.md)**:
+
+- [Quickstart](docs/QUICKSTART.md): a working feast in four files
+- [Authoring reference](docs/AUTHORING.md): every field of every kind
+- [Placeable food guide](docs/PLACEABLES.md): stacking, take-back and drops, with a worked example
+- [Examples](docs/EXAMPLES.md): feast, pie, plate, shelf, cookie
+- [Shipping your mod](docs/SHIPPING.md) and [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [JSON schemas](schemas/) for editor validation
+
+Working demo: [`testmod/rtest`](testmod/rtest). Real-world use: [Delightful](https://github.com/realblobii/delightful) uses Roast for
+its feasts, pies and 104 placeable foods.
 
 ## Status
 
-Version 0.3.0 is **written, not run in Horizon**: the pure logic has unit tests (against a stand-in JSON library); the game hooks were never
-compiled against Horizon. The demo mod `testmod/rtest` shows a feast, a pie, a display and a placeable cookie. Display Delight's food blocks (LGPL-3.0) are carried by Delightful, not by Roast.
+**Untested in the game.** The logic has unit tests, but the game hooks have not yet been run in Horizon. Singleplayer is the target.
 
-## For mod authors
+## Contributing
 
-Start at [`docs/README.md`](docs/README.md): quickstart, full field reference, a Display-Delight-style placeable food guide, examples, shipping notes
-and JSON schemas. Delightful's 104 placeable foods are real-world examples.
-
-## Files
-
-- `docs/README.md`: the documentation home (quickstart, reference, examples, troubleshooting, schemas).
-- `mixins/roast/`: the native mod. `testmod/`: the demo content mod. `schemas/`: JSON schemas.
-- `CLAUDE.md`: rules for Claude working in this repo. `docs/BRIEF.md`, `OPEN_QUESTIONS.md`, `FINDINGS.md`: the research.
+`mixins/roast/` is the native mod. Notes for people working on Roast itself are in [docs/dev/](docs/dev/).

@@ -13,7 +13,7 @@ Roast lets a content mod add **feasts, cakes and pies, displays that show any it
 | [Examples](EXAMPLES.md) | You want to copy a feast, a pie, a plate or a display shelf, or a placeable cookie. |
 | [Troubleshooting](TROUBLESHOOTING.md) | Something does not work, or the log shows a `roast` warning. |
 | [JSON schemas](../schemas/) | You want your editor to check your files. |
-| [Findings](FINDINGS.md), [Brief](BRIEF.md), [Open questions](OPEN_QUESTIONS.md) | You work on Roast itself. |
+| [Findings](dev/FINDINGS.md), [Brief](dev/BRIEF.md), [Open questions](dev/OPEN_QUESTIONS.md) | You work on Roast itself. |
 
 Working demo: [`testmod/rtest`](../testmod/rtest).
 

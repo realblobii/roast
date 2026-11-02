@@ -14,11 +14,11 @@ Decisions already made (do not re-ask):
 
 ## Current state
 
-Roast 0.1.0 exists (written 2 Nov 2026, **never built or run in Horizon**). Read `docs/FINDINGS.md` first. The four kinds are feast, cake, display (any item) and placeable.
+Roast 0.1.0 exists (written 2 Nov 2026, **never built or run in Horizon**). Read `docs/dev/FINDINGS.md` first. The four kinds are feast, cake, display (any item) and placeable.
 
 ## Rule 0: research before code
 
-Do not write code until `docs/OPEN_QUESTIONS.md` is answered in `docs/FINDINGS.md` with the file and line each answer came from,
+Do not write code until `docs/dev/OPEN_QUESTIONS.md` is answered in `docs/dev/FINDINGS.md` with the file and line each answer came from,
 at the **pinned Horizon commit** (see Cookpot's `compatibility.json`; check it against the user's nightly each session).
 Horizon is unofficial and moves fast: never rely on memory for a hook name, signature or file format. When docs and source
 disagree, the source at the pinned commit wins. Never claim something works unless it was built and run in the game.

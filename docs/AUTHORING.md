@@ -1,7 +1,7 @@
 # Roast authoring reference (v0.3.0)
 
 > **Written from the source and unit-tested only for its pure logic (against a stand-in JSON library). The game hooks were never
-> compiled against Horizon or run.** See `FINDINGS.md` and `TROUBLESHOOTING.md`.
+> compiled against Horizon or run.** See `dev/FINDINGS.md` and `TROUBLESHOOTING.md`.
 
 All four kinds are JSON files at `data/<ns>/recipe/<name>.json` with a `type`. The block (or item) itself is an ordinary content-mod
 declaration; Roast adds the behaviour. A block named by a definition never gets vanilla's own use (so a cake-template block does not
