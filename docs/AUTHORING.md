@@ -73,7 +73,7 @@ block but not drawn.
 | `sound` | none | |
 
 With the same item in hand, a right-click on the placed block adds one (up to `stack_max`). One item is used per placement (none in
-creative). Breaking the block drops what its loot table says: give it a table that drops the item, with `minecraft:set_count` per
+creative). Breaking the block drops what its loot table says: give it a table that drops the item (see the [placeable guide](PLACEABLES.md): conditions need a `type` key), with `minecraft:set_count` per
 value of the count property if it stacks. Sneaking is read from the Shift key on the machine running the game (single player and LAN host).
 
 ## Limits

@@ -38,9 +38,18 @@ List every value up to `stack_max`. A model can use any item texture or your own
 
 ## 3. The drops (`data/mypack/loot_table/blocks/placed_cookie.json`)
 
-Roast does not drop items itself; breaking the block uses this table. One entry per count, chosen with `block_state_property`
-and sized with `set_count` (see Delightful's `placed_plated_cookie.json` for a finished copy). A single-item block just needs one
-`minecraft:item` entry. The loot-table syntax for 26.3 is one of the unverified parts of the project: check it in the game log.
+Roast does not drop items itself; breaking the block uses this table. Read from Horizon's source at the pinned commit
+(`crates/horizon-items/src/items.rs`, `block_loot_table` and `condition`, **not yet run in the game**):
+
+- The table is found at `data/<ns>/loot_table/blocks/<block name>.json` (id `<ns>:blocks/<name>`).
+- **Every condition object needs a `"type"` key** (`{"type": "minecraft:block_state_property", ...}`). Horizon reads the kind from `type`,
+  and an unknown or missing kind counts as **false**, so a vanilla-style `{"condition": "..."}` alone never matches and the block drops
+  nothing. Writing both keys (`"condition"` and `"type"`) is safe. This applies to `survives_explosion` as well.
+- `minecraft:block_state_property` takes `block` and `properties` (or `blocks` and `state`); values are strings, or `{min, max}` ranges.
+- `minecraft:alternatives` and `minecraft:set_count` (`count`, `add`) are supported. Functions accept `function` or `type`.
+- Conditions go in an entry's or pool's `conditions` (list) or `condition` (single).
+
+One entry per count, chosen with `block_state_property` and sized with `set_count` (see Delightful's `placed_plated_cookie.json`).
 
 ## 4. The Roast definition (`data/mypack/recipe/placed_cookie.json`)
 

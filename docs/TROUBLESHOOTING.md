@@ -33,3 +33,7 @@ has a model.
 **A placeable does nothing.** The clicked face must be the top (`top_only`), the space next to it must be air, and the block must exist.
 
 **Edits to JSON have no effect.** Content is read once when a world loads: restart the game.
+
+## Breaking a placed food drops nothing
+
+In a loot table, every condition object needs `"type"` (Horizon treats a missing or unknown kind as false). See the [placeable guide](PLACEABLES.md#3-the-drops-datamypackloot_tableblocksplaced_cookiejson).
