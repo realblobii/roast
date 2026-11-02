@@ -21,7 +21,12 @@ All four are definitions in JSON inside a content mod; Roast reads them when a w
 ## Status
 
 Version 0.3.0 is **written, not run in Horizon**: the pure logic has unit tests (against a stand-in JSON library); the game hooks were never
-compiled against Horizon. The demo mod `testmod/rtest` shows a feast, a pie, a display and a placeable cookie.
+compiled against Horizon. The demo mod `testmod/rtest` shows a feast, a pie, a display and a placeable cookie. Display Delight's food blocks (LGPL-3.0) are carried by Delightful, not by Roast.
+
+## For mod authors
+
+Start at [`docs/README.md`](docs/README.md): quickstart, full field reference, a Display-Delight-style placeable food guide, examples, shipping notes
+and JSON schemas. Delightful's 104 placeable foods are real-world examples.
 
 ## Files
 

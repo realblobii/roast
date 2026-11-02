@@ -8,6 +8,8 @@ Roast lets a content mod add **feasts, cakes and pies, displays that show any it
 |---|---|
 | [Quickstart](QUICKSTART.md) | You want a working feast in four small files. Start here. |
 | [Authoring reference](AUTHORING.md) | You need every field of the four kinds. |
+| [Placeable food guide](PLACEABLES.md) | You want Display-Delight-style food set down as a 3D block, stacking, with a worked example. |
+| [Shipping](SHIPPING.md) | You are releasing a mod that needs Roast. |
 | [Examples](EXAMPLES.md) | You want to copy a feast, a pie, a plate or a display shelf, or a placeable cookie. |
 | [Troubleshooting](TROUBLESHOOTING.md) | Something does not work, or the log shows a `roast` warning. |
 | [JSON schemas](../schemas/) | You want your editor to check your files. |
