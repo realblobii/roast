@@ -1,0 +1,8 @@
+id = "rtest"
+name = "Roast Test"
+version = "0.1.0"
+description = "Demo for Roast: a feast, a pie, a plate that shows any item, and a placeable cookie. Not part of the library."
+authors = ["roast"]
+api = "0.2"
+side = "both"
+capabilities = ["registries"]

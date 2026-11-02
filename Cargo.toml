@@ -1,0 +1,14 @@
+[package]
+name = "roast-runtime"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Roast's pure logic, unit-tested outside the game"
+
+[lib]
+# This exact source is also injected into the game as a module by horizon-mixins.
+path = "mixins/roast/runtime.rs"
+
+[dependencies]
+serde_json = "1"
+log = "0.4"

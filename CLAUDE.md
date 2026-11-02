@@ -12,6 +12,10 @@ Decisions already made (do not re-ask):
 - Follow Cookpot's conventions (`https://github.com/realblobii/cookpot`): pure logic in a `[[module]]` `runtime.rs` with unit
   tests, thin game glue in helpers, JSON schemas, a docs home page (`docs/README.md`), and honest "untested" labels.
 
+## Current state
+
+Roast 0.1.0 exists (written 2 Nov 2026, **never built or run in Horizon**). Read `docs/FINDINGS.md` first. The four kinds are feast, cake, display (any item) and placeable.
+
 ## Rule 0: research before code
 
 Do not write code until `docs/OPEN_QUESTIONS.md` is answered in `docs/FINDINGS.md` with the file and line each answer came from,

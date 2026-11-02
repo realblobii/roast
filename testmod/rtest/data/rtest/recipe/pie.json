@@ -1,0 +1,15 @@
+{
+  "type": "roast:cake",
+  "block": "rtest:pie",
+  "max": 3,
+  "nutrition": 3,
+  "saturation_modifier": 0.4,
+  "effects": [
+    {
+      "id": "minecraft:regeneration",
+      "duration": 60,
+      "amplifier": 0
+    }
+  ],
+  "sound": "minecraft:entity.generic.eat"
+}

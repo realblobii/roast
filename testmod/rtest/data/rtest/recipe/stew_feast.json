@@ -1,0 +1,11 @@
+{
+  "type": "roast:feast",
+  "block": "rtest:stew_feast",
+  "max": 4,
+  "container": "minecraft:bowl",
+  "serving": "rtest:stew_serving",
+  "on_empty": {
+    "replace": "rtest:plate"
+  },
+  "sound": "minecraft:block.wool.break"
+}

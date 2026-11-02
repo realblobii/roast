@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Roast placeable (data/<ns>/recipe/<name>.json)",
+  "type": "object",
+  "required": [
+    "type",
+    "item",
+    "block"
+  ],
+  "properties": {
+    "type": {
+      "const": "roast:placeable"
+    },
+    "item": {
+      "type": "string"
+    },
+    "block": {
+      "type": "string",
+      "pattern": ":"
+    },
+    "top_only": {
+      "type": "boolean",
+      "default": true
+    },
+    "sound": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    }
+  }
+}

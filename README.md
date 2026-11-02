@@ -13,19 +13,18 @@ plain cakes because Horizon's block templates have no "servings" behaviour. Roas
 - **Feasts:** a block with servings. Right-click with the container item (a bowl) to take a serving, which becomes a normal
   food item in your inventory; the block shows fewer servings each time and leaves a dish or vanishes when empty.
 - **Cake-like blocks:** a block eaten in bites (pies, cakes, cheesecakes), with its own nutrition, effects and leftover.
-- **Placeable plates:** a plate block that holds one item and shows it (a block entity that draws the item).
+- **Displays:** a block that holds **any item** you place on it and shows it (a plate, a shelf, Display-Delight-style), not only cake.
 - **Placeable food:** food items that can also be set down as a block and eaten from it.
 
 All four are definitions in JSON inside a content mod; Roast reads them when a world loads, the way Cookpot does.
 
 ## Status
 
-Not started: this repository holds instructions and a first research pass (`docs/FINDINGS.md`). **Nothing has been built or run
-in the game.**
+Version 0.1.0 is **written, not run in Horizon**: the pure logic has unit tests (against a stand-in JSON library); the game hooks were never
+compiled against Horizon. The demo mod `testmod/rtest` shows a feast, a pie, a display and a placeable cookie.
 
 ## Files
 
-- `CLAUDE.md`: rules for Claude working in this repo. Read first.
-- `docs/BRIEF.md`: scope, the four kinds, a sketch of the data formats, phases.
-- `docs/OPEN_QUESTIONS.md`: what the research must still answer.
-- `docs/FINDINGS.md`: answers so far, with source lines.
+- `docs/README.md`: the documentation home (quickstart, reference, examples, troubleshooting, schemas).
+- `mixins/roast/`: the native mod. `testmod/`: the demo content mod. `schemas/`: JSON schemas.
+- `CLAUDE.md`: rules for Claude working in this repo. `docs/BRIEF.md`, `OPEN_QUESTIONS.md`, `FINDINGS.md`: the research.

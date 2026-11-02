@@ -37,7 +37,7 @@ can claim a use and `native_set_block` can then place the block. Not confirmed: 
 
 ## Open: likely blockers
 
-**3. Feeding the player and applying effects.** No documented helper was found. `native_give_experience` exists for XP
+**3. Feeding the player and applying effects: reachable through private game API, as the game itself does it.** (First pass found no documented helper.) `native_give_experience` exists for XP
 (`server.rs:830`) but nothing for food level or effects. The game has `FoodData::eat_properties(nutrition, saturation)`
 (`crates/horizon-world/src/food.rs:51`) and `potions.effects.add(...)` on the game (used by `beacon.rs:303`), so a hook compiled
 in the game module might reach them through **private fields**; their names on the player's `Game` and their stability across
@@ -53,3 +53,31 @@ nightlies are unchecked. Until confirmed:
 A throwaway test mod with one feast block (`servings` 0 to 4, a model per state), and the smallest Roast: the right-click hook,
 the held-item check, take-bowl and give-serving, set-property, replace at 0. Acceptance: right-click with a bowl four times gives
 four servings and the block goes down a stage each time.
+
+## Second pass (2 Nov 2026, evening): the answers that unblocked the build
+
+**3 (resolved, with a caveat).** `Game::finish_consuming` (`game/consume.rs:44-105`) feeds the local player with
+`p.health.food.food` and `.saturation` (clamped 0..20) and adds effects with `self.add_player_effect(EffectInstance::new(def.id,
+duration, amplifier))` (`game/potions.rs:893`, `pub(super)`, so visible to hooks in `game::native_hooks`), looking effects up with
+`horizon_client::brewing::effect(id)`. Roast's cake does the same by hand (`click.rs`). **Caveat:** these are private game API, not a
+hook: a nightly may rename them. Inside a hook the acting player's state is swapped in (docs on `native_use_item_on`), so this also
+reaches a LAN host's guests, untested.
+
+**5 (answered).** `native_with_mod_block_entity(pos, |entity| ...)` (`hooks.rs:3446`) edits a mod block entity's item slots from any hook.
+Drawing: `native_block_entity_submit` (`hooks.rs:1666`, API 71) with the draw pose helpers `push/pop/translate/rotate_about/scale`
+(`native_block_entity_draw.rs:64-120`) and `native_draw_item(draw, stack, DisplayContext::Fixed, None, seed)`
+(`native_block_entity_draw.rs:481`). The client copy has **no item slots**, so the shown item is sent in the saved data: Roast mirrors
+slot 0 into `nbt.shown` each tick and returns the nbt from `native_block_entity_update_tag` (`hooks.rs:1647`, no `self`).
+A container needs `menu: None` for no menu (`ModContainer.menu: Option<String>`).
+
+**6 (answered).** `native_use_item_on(stack, pos, face, claimed)` (`hooks.rs:2292`) sets down the item; `native_set_block(dim, pos,
+state, flags)` (`hooks.rs:3181`) places; the block id becomes a state by `registry.default_state(name)` (`hooks.rs:4208`).
+
+**Blockers that remain (all untested):** the hooks compile only in the launcher; `block_entity_update_tag` and `block_entity_submit`
+bindings follow the signatures read here but were never built; `game.hand`, `game.dim.id()`, `game.creative` and `game.items()` are
+private fields reached as `ModItems` and `providers()` were in Cookpot.
+
+## Built
+
+Roast 0.1.0: four kinds (`roast:feast`, `roast:cake`, `roast:display`, `roast:placeable`), 8 unit tests (pass against a stand-in JSON
+library), a demo mod `testmod/rtest`, schemas, docs. **Not built or run in Horizon.**

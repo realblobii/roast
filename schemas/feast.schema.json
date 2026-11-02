@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Roast feast (data/<ns>/recipe/<name>.json)",
+  "type": "object",
+  "required": [
+    "type",
+    "block",
+    "serving"
+  ],
+  "properties": {
+    "type": {
+      "const": "roast:feast"
+    },
+    "block": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": ":"
+        },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": ":"
+          }
+        }
+      ]
+    },
+    "property": {
+      "type": "string",
+      "default": "servings"
+    },
+    "max": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 64,
+      "default": 4
+    },
+    "container": {
+      "type": "string"
+    },
+    "consume_container": {
+      "type": "boolean",
+      "default": true
+    },
+    "serving": {
+      "type": "string",
+      "pattern": ":"
+    },
+    "on_empty": {
+      "oneOf": [
+        {
+          "enum": [
+            "keep",
+            "break"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "replace"
+          ],
+          "properties": {
+            "replace": {
+              "type": "string",
+              "pattern": ":"
+            }
+          }
+        }
+      ]
+    },
+    "clear_when_empty": {
+      "type": "boolean",
+      "default": true
+    },
+    "leftover": {
+      "type": "string"
+    },
+    "sound": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"
+    }
+  }
+}

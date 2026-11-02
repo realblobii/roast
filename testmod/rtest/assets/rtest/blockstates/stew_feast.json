@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "servings=4": {
+      "model": "minecraft:block/cake"
+    },
+    "servings=3": {
+      "model": "minecraft:block/cake_slice1"
+    },
+    "servings=2": {
+      "model": "minecraft:block/cake_slice2"
+    },
+    "servings=1": {
+      "model": "minecraft:block/cake_slice3"
+    },
+    "servings=0": {
+      "model": "minecraft:block/white_carpet"
+    }
+  }
+}

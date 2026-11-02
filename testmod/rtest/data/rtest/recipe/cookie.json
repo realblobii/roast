@@ -1,0 +1,6 @@
+{
+  "type": "roast:placeable",
+  "item": "rtest:cookie",
+  "block": "rtest:cookie_block",
+  "sound": "minecraft:block.wool.place"
+}
