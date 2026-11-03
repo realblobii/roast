@@ -407,7 +407,7 @@ impl Defs {
     }
     /// Whether any definition names `block`.
     pub fn knows(&self, block: &str) -> bool {
-        self.feast(block).is_some() || self.cake(block).is_some() || self.display(block).is_some() || self.placed(block).is_some()
+        self.feast(block).is_some() || self.cake(block).is_some() || self.display(block).is_some() || self.placed(block).is_some_and(|p| p.take)
     }
 }
 
